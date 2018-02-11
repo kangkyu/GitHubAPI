@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray_300"
     android:padding="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.example.android.githubapi.UserActivity">
 
     <ImageView
