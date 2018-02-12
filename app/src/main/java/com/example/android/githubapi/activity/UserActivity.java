@@ -7,6 +7,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.githubapi.R;
+import com.example.android.githubapi.model.GitHubUser;
+import com.example.android.githubapi.rest.APIClient;
+import com.example.android.githubapi.rest.GitHubUserEndPoints;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UserActivity extends AppCompatActivity {
 
@@ -42,10 +49,23 @@ public class UserActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        userNameTV.setText("No name provided");
-        followersTV.setText("Followers: 0");
-        followingTV.setText("Following: 0");
-        login.setText("Login: " + newString);
-        email.setText("No email provided");
+        final GitHubUserEndPoints apiService = APIClient.getClient().create(GitHubUserEndPoints.class);
+        Call<GitHubUser> call = apiService.getUser(newString);
+        call.enqueue(new Callback<GitHubUser>(){
+
+            @Override
+            public void onResponse(Call<GitHubUser> call, Response<GitHubUser> response) {
+                userNameTV.setText(response.body().getName());
+                followersTV.setText("Followers: " + response.body().getFollowers());
+                followingTV.setText("Following: " + response.body().getFollowing());
+                login.setText("Login: " + response.body().getLogin());
+                email.setText("Email: " + response.body().getEmail());
+            }
+
+            @Override
+            public void onFailure(Call<GitHubUser> call, Throwable t) {
+                System.out.println("Failed!" + t.toString());
+            }
+        });
     }
 }
