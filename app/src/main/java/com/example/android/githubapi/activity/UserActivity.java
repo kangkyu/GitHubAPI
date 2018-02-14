@@ -59,7 +59,11 @@ public class UserActivity extends AppCompatActivity {
                 followersTV.setText("Followers: " + response.body().getFollowers());
                 followingTV.setText("Following: " + response.body().getFollowing());
                 login.setText("Login: " + response.body().getLogin());
-                email.setText("Email: " + response.body().getEmail());
+                if (response.body().getEmail() == null) {
+                    email.setText("No email provided");
+                } else {
+                    email.setText("Email: " + response.body().getEmail());
+                }
             }
 
             @Override
