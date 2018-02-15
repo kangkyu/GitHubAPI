@@ -53,5 +53,7 @@
         android:layout_marginTop="15dp"
         android:text="@string/repositories"
         android:textAllCaps="false"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:onClick="loadOwnRepos"/>
+
 </LinearLayout>
