@@ -8,9 +8,16 @@ import android.widget.TextView;
 
 import com.example.android.githubapi.R;
 import com.example.android.githubapi.adapter.ReposAdapter;
+import com.example.android.githubapi.model.GitHubRepo;
+import com.example.android.githubapi.rest.APIClient;
+import com.example.android.githubapi.rest.GitHubRepoEndPoints;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Repositories extends AppCompatActivity {
 
@@ -20,7 +27,7 @@ public class Repositories extends AppCompatActivity {
     TextView userNameTV;
     RecyclerView mRecyclerView;
     ReposAdapter myAdapter;
-    List<String> myDataSource = Arrays.asList("a", "b", "c");
+    List<GitHubRepo> myDataSource = new ArrayList<GitHubRepo>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,5 +49,25 @@ public class Repositories extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         myAdapter = new ReposAdapter(myDataSource, R.layout.list_item_repo, getApplicationContext());
         mRecyclerView.setAdapter(myAdapter);
+
+        loadRepositories();
+    }
+
+    public void loadRepositories() {
+        final GitHubRepoEndPoints apiService = APIClient.getClient().create(GitHubRepoEndPoints.class);
+        Call<List<GitHubRepo>> call = apiService.getRepos(newString);
+        call.enqueue(new Callback<List<GitHubRepo>>(){
+            @Override
+            public void onResponse(Call<List<GitHubRepo>> call, Response<List<GitHubRepo>> response) {
+                myDataSource.clear();
+                myDataSource.addAll(response.body());
+                myAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<GitHubRepo>> call, Throwable t) {
+                System.out.println("Failed!" + t.toString());
+            }
+        });
     }
 }

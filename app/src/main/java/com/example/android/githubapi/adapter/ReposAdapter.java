@@ -9,25 +9,26 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.githubapi.R;
+import com.example.android.githubapi.model.GitHubRepo;
 
 import java.util.List;
 
 public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ReposViewHolder> {
-    private List<String> repos;
+    private List<GitHubRepo> repos;
     private int rowLayout;
     private Context context;
 
-    public ReposAdapter(List<String> repos, int rowLayout, Context context) {
+    public ReposAdapter(List<GitHubRepo> repos, int rowLayout, Context context) {
         this.setRepos(repos);
         this.setRowLayout(rowLayout);
         this.setContext(context);
     }
 
-    public List<String> getRepos() {
+    public List<GitHubRepo> getRepos() {
         return repos;
     }
 
-    public void setRepos(List<String> repos) {
+    public void setRepos(List<GitHubRepo> repos) {
         this.repos = repos;
     }
 
@@ -55,7 +56,9 @@ public class ReposAdapter extends RecyclerView.Adapter<ReposAdapter.ReposViewHol
 
     @Override
     public void onBindViewHolder(ReposViewHolder holder, int position) {
-        holder.repoName.setText(repos.get(position));
+        holder.repoName.setText(repos.get(position).getName());
+        holder.repoDescription.setText(repos.get(position).getDescription());
+        holder.repoLanguage.setText(repos.get(position).getLanguage());
     }
 
     @Override
